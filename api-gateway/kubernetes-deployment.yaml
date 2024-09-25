@@ -16,7 +16,7 @@ spec:
         - name: api-gateway
           image: moh96/api-gateway:latest
           ports:
-            - containerPort: 8082
+            - containerPort: 9000
 ---
 apiVersion: v1
 kind: Service
