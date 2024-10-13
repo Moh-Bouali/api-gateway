@@ -4,6 +4,8 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.socket.server.RequestUpgradeStrategy;
+import org.springframework.web.reactive.socket.server.upgrade.ReactorNettyRequestUpgradeStrategy;
 
 @Configuration
 public class Routes {
@@ -27,7 +29,15 @@ public class Routes {
                         // We don't remove the Authorization header
                         .uri("http://localhost:8085")  // Forward to the User Service URI
                 )
+                .route("notification-service", r -> r
+                        .path("/ws/**")
+                        .uri("ws://localhost:8083")) // Point to your notification service
                 .build();
+    }
+
+    @Bean
+    public RequestUpgradeStrategy requestUpgradeStrategy() {
+        return new ReactorNettyRequestUpgradeStrategy();
     }
 }
 
