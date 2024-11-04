@@ -29,6 +29,11 @@ public class Routes {
                         // We don't remove the Authorization header
                         .uri("http://localhost:8085")  // Forward to the User Service URI
                 )
+                .route("post-service", r -> r
+                        .path("/api/post/**")  // Match post service paths
+                        // We don't remove the Authorization header
+                        .uri("http://localhost:8081")  // Forward to the Post Service URI
+                )
                 .route("notification-service", r -> r
                         .path("/ws/**")
                         .uri("ws://localhost:8083")) // Point to your notification service
