@@ -30,15 +30,18 @@ jobs:
         run: mvn sonar:sonar -Dsonar.projectKey=Moh-Bouali_api-gateway -Dsonar.organization=moh-bouali -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: ./api-gateway
 
-      - name: Build Docker image
-        run: docker build -t moh96/api-gateway:${{ github.sha }} .
-        working-directory: ./api-gateway
-
+      - name: Build Docker Image
+        run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} .
+        working-directory: ./post-service
+      
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Push Docker image
+      - name: Push Docker Image with SHA Tag
         run: docker push moh96/api-gateway:${{ github.sha }}
+
+      - name: Push Docker Image with Latest Tag
+        run: docker push moh96/api-gateway:latest
 
     # - name: Deploy to Kubernetes
     #   run: kubectl apply -f kubernetes-deployment.yaml
