@@ -48,15 +48,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/trivy
-          key: ${{ runner.os }}-trivy-db
+          key: ${{ runner.os }}-trivy-java-db
           restore-keys: |
-            ${{ runner.os }}-trivy-db
-
-      - name: Ensure Trivy Database is Downloaded
-        run: trivy image --download-db-only
+            ${{ runner.os }}-trivy-java-db
 
       - name: Scan Docker Image
-        run: trivy image --exit-code 1 --severity CRITICAL --skip-db-update --scanners vuln,config moh96/api-gateway:latest
+        run: trivy image --exit-code 1 --severity CRITICAL moh96/api-gateway:latest
       
       - name: Push Docker Image with SHA Tag
         run: docker push moh96/api-gateway:${{ github.sha }}
