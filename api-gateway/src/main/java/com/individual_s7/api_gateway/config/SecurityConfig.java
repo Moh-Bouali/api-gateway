@@ -52,7 +52,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("http://frontend-domain")); // Dynamic origins based on environment
+        corsConfig.setAllowedOrigins(Arrays.asList("https://frontend-domain")); // Dynamic origins based on environment
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-User-Id", "X-Friend-Id"));
         corsConfig.setExposedHeaders(Arrays.asList("Authorization", "X-User-Id")); // Expose custom headers
