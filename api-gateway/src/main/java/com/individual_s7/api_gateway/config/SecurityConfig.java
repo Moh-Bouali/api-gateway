@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers("/ws/**").permitAll() // Allow all WebSocket connections without authentication
                         .pathMatchers(HttpMethod.POST, "/api/user/register").permitAll() // Registration is public
+                        .pathMatchers(HttpMethod.POST, "/api/post/create").permitAll() // Registration is public
                         .anyExchange().authenticated() // All other endpoints require authentication
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -52,8 +53,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        //corsConfig.setAllowedOrigins(Arrays.asList("http://frontend-domain")); // Dynamic origins based on environment
-        corsConfig.setAllowedOrigins(Arrays.asList("*"));
+        corsConfig.setAllowedOrigins(Arrays.asList("http://frontend-domain")); // Dynamic origins based on environment
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-User-Id", "X-Friend-Id"));
         corsConfig.setExposedHeaders(Arrays.asList("Authorization", "X-User-Id")); // Expose custom headers
