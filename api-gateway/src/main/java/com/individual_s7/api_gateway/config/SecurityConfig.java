@@ -34,9 +34,9 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers("/ws/**").permitAll() // Allow all WebSocket connections without authentication
-                        .pathMatchers(HttpMethod.POST, "/api/user/register").permitAll()
-                        .pathMatchers(HttpMethod.GET, "/api/user/search").permitAll()// Registration is public
-                        .pathMatchers(HttpMethod.POST, "/api/post/create").permitAll() // Registration is public
+                        .pathMatchers(HttpMethod.POST, "/api/user/register").permitAll() // Registration is public
+                        .pathMatchers(HttpMethod.GET, "/api/user/**").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/api/post/create").permitAll()
                         .anyExchange().authenticated() // All other endpoints require authentication
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
