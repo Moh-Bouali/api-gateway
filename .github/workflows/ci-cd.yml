@@ -34,13 +34,8 @@ jobs:
       #   run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} .
       #   working-directory: ./api-gateway
       
-      - name: Move CA cert into api-gateway
-        run: cp deployment/ca.crt api-gateway/ca.crt
-
       - name: Build Docker Image
-        working-directory: ./api-gateway
-        run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} .
-
+        run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} -f api-gateway/Dockerfile .
 
       - name: Install Trivy
         run: |
