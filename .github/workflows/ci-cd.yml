@@ -30,12 +30,9 @@ jobs:
         run: mvn sonar:sonar -Dsonar.projectKey=Moh-Bouali_api-gateway -Dsonar.organization=moh-bouali -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: ./api-gateway
 
-      # - name: Build Docker Image
-      #   run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} .
-      #   working-directory: ./api-gateway
-      
       - name: Build Docker Image
-        run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} -f api-gateway/Dockerfile .
+        run: docker build -t moh96/api-gateway:latest -t moh96/api-gateway:${{ github.sha }} .
+        working-directory: ./api-gateway
 
       - name: Install Trivy
         run: |
