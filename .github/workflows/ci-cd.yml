@@ -110,9 +110,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          set -e
           kubectl apply -f ./api-gateway/deployment/
-          kubectl rollout status deployment/api-gateway
           # kubectl apply -f ./api-gateway/deployment/api-gateway-deployment.yaml
           # kubectl apply -f ./api-gateway/deployment/api-gateway-cm0-configmap.yaml
           # kubectl apply -f ./api-gateway/deployment/api-gateway-hpa.yaml
