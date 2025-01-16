@@ -1,0 +1,22 @@
+apiVersion: v1
+data:
+  .env: |-
+    SERVER_PORT=9000
+    KEYCLOAK_AUTH_SERVER_URL=https://keycloak-domain/
+    KEYCLOAK_REALM=spring-microservices-security-realm
+    KEYCLOAK_RESOURCE=spring-client-individual-id
+    KEYCLOAK_SECRET=UjrPJ1JqQQrqHNryhheHvIbXUDUAw1tQ
+    JWT_ISSUER_URI=https://keycloak-domain/realms/spring-microservices-security-realm
+    JWT_JWK_SET_URI=https://keycloak-domain/realms/spring-microservices-security-realm/protocol/openid-connect/certs
+
+    USER_SERVICE_URL=http://user-service:8080
+    FRIENDSHIP_SERVICE_URL=http://friendship-service:8085
+    POST_SERVICE_URL=http://post-service:8081
+    NOTIFICATION_SERVICE_URL=ws://notification-service:8083
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: api-gateway
+  name: api-gateway-cm0

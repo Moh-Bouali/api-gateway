@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-hpa # Name of the HPA resource
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1 # API version for deployments (apps/v1)
+    kind: Deployment # Type of resource we're scaling (deployment)
+    name: api-gateway # Name of the deployment (must match the deployment name)
+  minReplicas: 1 # Minimum number of replicas (pods)
+  maxReplicas: 5 # Maximum number of replicas (pods)
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50 # Scale if average CPU utilization exceeds 50%
