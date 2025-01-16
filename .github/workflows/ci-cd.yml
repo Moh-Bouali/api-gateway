@@ -87,8 +87,11 @@ jobs:
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
+      # - name: Azure Login with Service Principal
+      #   run: az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+
       - name: Azure Login with Service Principal
-        run: az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+        run: az login --service-principal -u "5b035de4-2bed-4c91-bfd3-e196653212ce" -p "njE8Q~.rf-cK5I0srOJPXSAmT1iJv5Azl-.NUcwM" --tenant "c66b6765-b794-4a2b-84ed-845b341c086a"
 
       - name: Get AKS Credentials
         run: az aks get-credentials \
