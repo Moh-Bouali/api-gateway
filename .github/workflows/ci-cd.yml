@@ -94,10 +94,7 @@ jobs:
         run: az login --service-principal -u "5b035de4-2bed-4c91-bfd3-e196653212ce" -p "njE8Q~.rf-cK5I0srOJPXSAmT1iJv5Azl-.NUcwM" --tenant "c66b6765-b794-4a2b-84ed-845b341c086a"
 
       - name: Get AKS Credentials
-        run: az aks get-credentials \
-          --resource-group k8s-individual-s7 \
-          --name individual-cluster-s7 \
-          --overwrite-existing
+        run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
 
       # - name: Log in to Azure
       #   uses: azure/login@v1
