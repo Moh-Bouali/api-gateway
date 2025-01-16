@@ -68,14 +68,6 @@ jobs:
       - name: Push Docker Image with Latest Tag
         run: docker push moh96/api-gateway:latest
 
-      # - name: Log in to Azure (OIDC)
-      #   uses: azure/login@v1
-      #   with:
-      #     auth-type: 'oidc'
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
       - name: Install Azure CLI
         run: |
           sudo apt-get update
@@ -96,21 +88,9 @@ jobs:
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
 
-      # - name: Log in to Azure
-      #   uses: azure/login@v1
-      #   with:
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      #     auth-type: SERVICE_PRINCIPAL
-
-      # - name: Configure kubectl
-      #   run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
-
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply --validate=false -f ./api-gateway/deployment/
+          kubectl apply -f ./api-gateway/deployment/
           # kubectl apply -f ./api-gateway/deployment/api-gateway-deployment.yaml
           # kubectl apply -f ./api-gateway/deployment/api-gateway-cm0-configmap.yaml
           # kubectl apply -f ./api-gateway/deployment/api-gateway-hpa.yaml
