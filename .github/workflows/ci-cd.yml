@@ -12,10 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    permissions: # Add permissions for OIDC authentication
-      id-token: write
-      contents: read
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -78,7 +74,6 @@ jobs:
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          environment: AzureCloud
 
       - name: Configure kubectl
         run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
