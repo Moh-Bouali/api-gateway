@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+# permissions:
+#   contents: read
+#   id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -52,9 +56,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-trivy-java-db
 
-      # - name: Scan Docker Image
-      #   run: trivy image --exit-code 1 --severity CRITICAL moh96/api-gateway:latest
-
       - name: Scan Docker Image
         run: |
           for i in {1..3}; do
@@ -67,5 +68,53 @@ jobs:
       - name: Push Docker Image with Latest Tag
         run: docker push moh96/api-gateway:latest
 
-    # - name: Deploy to Kubernetes
-    #   run: kubectl apply -f kubernetes-deployment.yaml
+      # - name: Log in to Azure (OIDC)
+      #   uses: azure/login@v1
+      #   with:
+      #     auth-type: 'oidc'
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Install Kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      # - name: Azure Login with Service Principal
+      #   run: az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+
+      - name: Azure Login with Service Principal
+        run: az login --service-principal -u "5b035de4-2bed-4c91-bfd3-e196653212ce" -p "njE8Q~.rf-cK5I0srOJPXSAmT1iJv5Azl-.NUcwM" --tenant "c66b6765-b794-4a2b-84ed-845b341c086a"
+
+      - name: Get AKS Credentials
+        run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
+
+      # - name: Log in to Azure
+      #   uses: azure/login@v1
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     auth-type: SERVICE_PRINCIPAL
+
+      # - name: Configure kubectl
+      #   run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
+
+      - name: Deploy to Kubernetes
+        run: |
+          set -e
+          kubectl apply -f ./api-gateway/deployment/
+          kubectl rollout status deployment/api-gateway
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-deployment.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-cm0-configmap.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-hpa.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-ingress.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-service.yaml
