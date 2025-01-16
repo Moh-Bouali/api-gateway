@@ -67,5 +67,19 @@ jobs:
       - name: Push Docker Image with Latest Tag
         run: docker push moh96/api-gateway:latest
 
-    # - name: Deploy to Kubernetes
-    #   run: kubectl apply -f kubernetes-deployment.yaml
+      - name: Set Azure Subscription
+        run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Configure kubectl
+        run: az aks get-credentials --resource-group k8s-individual-s7 --name individual-cluster-s7 --overwrite-existing
+
+      - name: Deploy to Kubernetes
+        run: |
+          set -e
+          kubectl apply -f ./api-gateway/deployment/
+          kubectl rollout status deployment/api-gateway
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-deployment.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-cm0-configmap.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-hpa.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-ingress.yaml
+          # kubectl apply -f ./api-gateway/deployment/api-gateway-service.yaml
